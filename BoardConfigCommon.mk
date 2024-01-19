@@ -84,6 +84,10 @@ BOARD_BOOT_HEADER_VERSION := 3
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 
 ifeq ($(PREBUILT_KERNEL),true)
+
+# Fix prebuilt build
+$(shell mkdir -p $(OUT_DIR)/target/product/stone/obj/KERNEL_OBJ/usr)
+
 BOARD_KERNEL_BINARIES := kernel
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)-kernel/dtbo.img
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)-kernel/kernel
@@ -97,7 +101,6 @@ else
 TARGET_KERNEL_SOURCE := kernel/xiaomi/stone
 TARGET_KERNEL_CONFIG := stone_defconfig
 TARGET_KERNEL_NO_GCC := true
-TARGET_KERNEL_CLANG_VERSION := r498229b
 endif
 
 TARGET_KERNEL_ADDITIONAL_FLAGS := DTC_EXT=$(shell pwd)/prebuilts/misc/linux-x86/dtc/dtc LLVM=1
@@ -114,9 +117,6 @@ BOARD_KERNEL_CMDLINE += pcie_ports=compat
 BOARD_KERNEL_CMDLINE += iptable_raw.raw_before_defrag=1
 BOARD_KERNEL_CMDLINE += ip6table_raw.raw_before_defrag=1
 BOARD_KERNEL_CMDLINE += androidboot.init_fatal_reboot_target=recovery
-
-# Fix prebuilt build
-$(shell mkdir -p $(OUT_DIR)/target/product/stone/obj/KERNEL_OBJ/usr)
 
 # Media
 TARGET_USES_ION := true
